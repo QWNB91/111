@@ -103,58 +103,62 @@ local n = 16
 local o = false
 
 l:Slider({
-Title = "步行速度",
-Min = 16,
-Max = 300,
-Default = 16,
-Callback = function(p)
-n = p
-if o and game.Players.LocalPlayer.Character then
-game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = p
-end
-end
+    Title = "步行速度",
+    Min = 16,
+    Max = 300,
+    Default = 16,
+    Callback = function(p)
+        n = p
+        if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = p
+        end
+    end
 })
 
 l:Toggle({
-Title = "启用速度修改",
-Value = false,
-Callback = function(p)
-o = p
-if p and game.Players.LocalPlayer.Character then
-game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = n
-elseif not p and game.Players.LocalPlayer.Character then
-game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
-end
-end
+    Title = "启用速度修改",
+    Default = false,
+    Callback = function(p)
+        o = p
+        if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+            if p then
+                game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = n
+            else
+                game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+            end
+        end
+    end
 })
 
 local q = 50
 local r = false
 
 l:Slider({
-Title = "跳跃高度",
-Min = 50,
-Max = 300,
-Default = 50,
-Callback = function(p)
-q = p
-if r and game.Players.LocalPlayer.Character then
-game.Players.LocalPlayer.Character.Humanoid.JumpPower = p
-end
-end
+    Title = "跳跃高度",
+    Min = 50,
+    Max = 300,
+    Default = 50,
+    Callback = function(p)
+        q = p
+        if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+            game.Players.LocalPlayer.Character.Humanoid.JumpPower = p
+        end
+    end
 })
 
 l:Toggle({
-Title = "启用跳跃修改",
-Value = false,
-Callback = function(p)
-r = p
-if p and game.Players.LocalPlayer.Character then
-game.Players.LocalPlayer.Character.Humanoid.JumpPower = q
-elseif not p and game.Players.LocalPlayer.Character then
-game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50
-end
-end
+    Title = "启用跳跃修改",
+    Default = false,
+    Callback = function(p)
+        r = p
+        if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+            if p then
+                game.Players.LocalPlayer.Character.Humanoid.JumpPower = q
+            else
+                game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50
+            end
+        end
+    end
 })
 
 l:Toggle({
@@ -215,6 +219,27 @@ end
 end
 })
 
+m:Toggle({
+Title = "神秘隐身脚本",
+Value = false,
+Callback = function(p)
+if p then
+    loadstring(game:HttpGet("https://pastebin.com/raw/3Rnd9rHf"))()
+end)
+
+m:Toggle({
+Title = "一键偷别人东西",
+Value = false,
+Callback = function(p)
+if p then
+    for i,v in pairs (game.Players:GetChildren()) do
+wait()
+for i,b in pairs (v.Backpack:GetChildren()) do
+b.Parent = game.Players.LocalPlayer.Backpack
+end
+end
+end)
+
 m:Button({
 Title = "神秘黑客脚本",
 Desc = "v6",
@@ -239,13 +264,56 @@ local A = e:Section({ Title = "通用功能" })
 local B = e:Section({ Title = "游戏脚本" })
 
 A:Button({
-Title = "无限收益",
+Title = "IY指令",
 Desc = "加载Infinite Yield脚本",
 Callback = function()
 pcall(function()
 loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
 end)
 end
+})
+
+A:Button({
+Title = "神秘穿墙脚本",
+Desc = "穿墙",
+Callback = function()
+    Callback = function(p1_0)
+        local Success_50, Error_Message_50 = pcall(function(...)
+            local Players_14 = game.Players;
+            local LocalPlayer_13 = Players.LocalPlayer;
+            local Character_6 = LocalPlayer.Character;
+            local Children = Character_6:GetChildren();
+            for i, v in pairs(Children) do
+                local var269 = (i and 14741302); -- 14741302
+                local IsA = v.IsA;
+                local BasePart = v:IsA("BasePart");
+                local var270 = (BasePart and 12076731); -- 12076731
+                local var271 = (var270 or 13981523);
+                local Not_P1_0 = not p1_0;
+                -- false
+                v.CanCollide = Not_P1_0;
+            end
+        end) -- true
+    end,
+})
+
+A:Button({
+Title = "点击传送工具",
+Desc = "点击即可传送",
+Callback = function()
+        local Mouse_2 = LocalPlayer:GetMouse()
+        Env.mouse = Mouse_2
+        local Click_Teleport = Instance.new("Tool")
+        Env.tool = Click_Teleport
+        Click_Teleport.RequiresHandle = false
+        Click_Teleport.Name = "Click Teleport"
+        local Connection_9
+        Connection_9 = Click_Teleport.Activated:connect(function(p1_0, p2_0, p3_0)
+            local var574 = Mouse_2.Hit + Vector3_New(0, 2.5, 0)
+            LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame_New(var574.X, var574.Y, var574.Z)
+        end)
+        Click_Teleport.Parent = LocalPlayer.Backpack
+    end,
 })
 
 A:Button({
@@ -268,143 +336,11 @@ end
 })
 
 A:Button({
-Title = "神秘装逼功能",
-Desc = "人物美化功能",
+Title = "Kenny甩飞",
+Desc = "null",
 Callback = function()
-pcall(function()
-MainTab = MainSection:Tab({ Title = "人物美化", Icon = "Sword" })
-
-MainTab:Toggle({
-Title = "美化无头",
-Default = false,
-Callback = function(Value)
-if Value then
-local char = Players.LocalPlayer.Character
-if char then
-local head = char:FindFirstChild("Head")
-if head then
-head.Transparency = 1
-local decal = head:FindFirstChildOfClass("Decal")
-if decal then
-decal:Destroy()
-end
-end
-end
-else
-local char = Players.LocalPlayer.Character
-if char then
-local head = char:FindFirstChild("Head")
-if head then
-head.Transparency = 0
-end
-end
-end
-end
-})
-
-MainTab:Toggle({
-Title = "美化断腿",
-Default = false,
-Callback = function(Value)
-if Value then
-local char = Players.LocalPlayer.Character
-if char then
-local rightLeg = char:FindFirstChild("RightLeg") or char:FindFirstChild("Right Leg")
-if rightLeg then
-for _, child in pairs(rightLeg:GetChildren()) do
-if child:IsA("SpecialMesh") then
-child:Destroy()
-end
-end
-local specialMesh = Instance.new("SpecialMesh")
-specialMesh.MeshId = "rbxassetid://101851696"
-specialMesh.TextureId = "rbxassetid://115727863"
-specialMesh.Scale = Vector3.new(1, 1, 1)
-specialMesh.Parent = rightLeg
-end
-end
-else
-local char = Players.LocalPlayer.Character
-if char then
-local rightLeg = char:FindFirstChild("RightLeg") or char:FindFirstChild("Right Leg")
-if rightLeg then
-for _, child in pairs(rightLeg:GetChildren()) do
-if child:IsA("SpecialMesh") then
-child:Destroy()
-end
-end
-end
-end
-end
-end
-})
-
-MainTab:Toggle({
-Title = "删除帽子",
-Default = false,
-Callback = function(Value)
-if Value then
-local char = Players.LocalPlayer.Character
-if char then
-for _, accessory in pairs(char:GetChildren()) do
-if accessory:IsA("Accessory") then
-accessory:Destroy()
-end
-end
-end
-end
-end
-})
-local rainbowCharacterEnabled = false
-local rainbowCharacterConnection = nil
-
-MainTab:Toggle({
-Title = "删除全部衣服",
-Default = false,
-Callback = function(Value)
-rainbowCharacterEnabled = Value
-if Value then
-if rainbowCharacterConnection then
-rainbowCharacterConnection:Disconnect()
-end
-rainbowCharacterConnection = RunService.RenderStepped:Connect(function()
-local char = Players.LocalPlayer.Character
-if not char then return end
-local hue = (tick() % 5) / 5
-local rainbowColor = Color3.fromHSV(hue, 1, 1)
-for _, part in pairs(char:GetChildren()) do
-if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-part.Color = rainbowColor
-local glow = part:FindFirstChild("RainbowGlow") or Instance.new("SurfaceAppearance")
-glow.Name = "RainbowGlow"
-glow.ColorMap = "rbxassetid://9018903989"
-glow.Parent = part
-end
-end
+loadstring(game:HttpGet("https://raw.githubusercontent.com/ke9460394-dot/ugik/refs/heads/main/DHJB%E7%94%A9%E9%A3%9E.txt"))()
 end)
-else
-if rainbowCharacterConnection then
-rainbowCharacterConnection:Disconnect()
-rainbowCharacterConnection = nil
-end
-local char = Players.LocalPlayer.Character
-if char then
-for _, part in pairs(char:GetChildren()) do
-if part:IsA("BasePart") then
-part.Color = Color3.fromRGB(163, 162, 165)
-local glow = part:FindFirstChild("RainbowGlow")
-if glow then
-glow:Destroy()
-end
-end
-end
-end
-end
-end
-})
-end)
-end
-})
 
 A:Button({
 Title = "外部房间发言",
@@ -435,6 +371,184 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/MSTTOPPER/Scripts/ref
 end)
 end
 })
+
+A:Button({
+Title = "无头加断腿",
+Desc = "可以装牛逼",
+Callback = function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Permanent-Headless-And-korblox-Script-4140"))()
+    end,
+})
+
+A:Button({
+Title = "增加FPS",
+Desc = "测试可以用",
+Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/smalldesikon/hun/ee906e570c0f5b22e580a20decaba23757533569/fps"))()
+end)
+
+A:Button({
+Title = "透视NPC功能",
+Desc = "null",
+Callback = function()
+local RunService = game:GetService("RunService")
+    local Workspace = game:GetService("Workspace")
+    
+    if Value then
+        local NPCESPTable = {}
+        
+        local function IsNPC(model)
+            if not model:IsA("Model") then return false end
+            
+            local humanoid = model:FindFirstChildOfClass("Humanoid")
+            if not humanoid then return false end
+            
+            local isPlayer = false
+            for _, player in pairs(game:GetService("Players"):GetPlayers()) do
+                if player.Character == model then
+                    isPlayer = true
+                    break
+                end
+            end
+            
+            return not isPlayer and humanoid.Health > 0
+        end
+        
+        local function CreateNPCESP(npc)
+            if NPCESPTable[npc] then return end
+            
+            local head = npc:FindFirstChild("Head") or npc:FindFirstChild("HumanoidRootPart")
+            if not head then return end
+            
+            local billboard = Instance.new("BillboardGui")
+            billboard.Name = "NPCESP_" .. npc.Name
+            billboard.Adornee = head
+            billboard.Size = UDim2.new(0, 150, 0, 30)
+            billboard.StudsOffset = Vector3.new(0, 3, 0)
+            billboard.AlwaysOnTop = true
+            billboard.Parent = head
+            
+            local textLabel = Instance.new("TextLabel")
+            textLabel.Size = UDim2.new(1, 0, 1, 0)
+            textLabel.BackgroundTransparency = 1
+            textLabel.Text = npc.Name
+            textLabel.TextColor3 = Color3.new(1, 1, 1)
+            textLabel.TextStrokeTransparency = 0
+            textLabel.TextSize = 14
+            textLabel.Font = Enum.Font.Gotham
+            textLabel.Parent = billboard
+            
+            local highlight = Instance.new("Highlight")
+            highlight.Name = "NPCESP_Highlight"
+            highlight.FillColor = Color3.new(0.5, 0, 0.5)
+            highlight.FillTransparency = 0.7
+            highlight.OutlineColor = Color3.new(1, 1, 1)
+            highlight.OutlineTransparency = 0
+            highlight.Adornee = npc
+            highlight.Parent = npc
+            
+            NPCESPTable[npc] = {
+                Billboard = billboard,
+                Highlight = highlight
+            }
+        end
+        
+        local function RemoveNPCESP(npc)
+            local espData = NPCESPTable[npc]
+            if espData then
+                if espData.Billboard then
+                    espData.Billboard:Destroy()
+                end
+                if espData.Highlight then
+                    espData.Highlight:Destroy()
+                end
+                NPCESPTable[npc] = nil
+            end
+        end
+        
+        local function ScanForNPCs()
+            for _, descendant in pairs(Workspace:GetDescendants()) do
+                if IsNPC(descendant) then
+                    CreateNPCESP(descendant)
+                end
+            end
+        end
+        
+        ScanForNPCs()
+        
+        local scanConnection
+        scanConnection = RunService.Heartbeat:Connect(function()
+            for _, descendant in pairs(Workspace:GetDescendants()) do
+                if IsNPC(descendant) and not NPCESPTable[descendant] then
+                    CreateNPCESP(descendant)
+                end
+            end
+            
+            for npc, espData in pairs(NPCESPTable) do
+                if not npc:IsDescendantOf(Workspace) then
+                    RemoveNPCESP(npc)
+                end
+            end
+        end)
+        
+        local descendantAddedConnection
+        descendantAddedConnection = Workspace.DescendantAdded:Connect(function(descendant)
+            if IsNPC(descendant) then
+                CreateNPCESP(descendant)
+            end
+        end)
+        
+        getgenv().NPCESP = {
+            Table = NPCESPTable,
+            ScanConnection = scanConnection,
+            DescendantConnection = descendantAddedConnection
+        }
+        
+    else
+        if getgenv().NPCESP then
+            if getgenv().NPCESP.ScanConnection then
+                getgenv().NPCESP.ScanConnection:Disconnect()
+            end
+            if getgenv().NPCESP.DescendantConnection then
+                getgenv().NPCESP.DescendantConnection:Disconnect()
+            end
+            
+            for npc, espData in pairs(getgenv().NPCESP.Table) do
+                RemoveNPCESP(npc)
+            end
+            
+            getgenv().NPCESP = nil
+        end
+        
+        for _, descendant in pairs(Workspace:GetDescendants()) do
+            if descendant:IsA("Model") then
+                for _, child in ipairs(descendant:GetDescendants()) do
+                    if child:IsA("BillboardGui") and string.find(child.Name, "NPCESP_") then
+                        child:Destroy()
+                    end
+                    if child:IsA("Highlight") and child.Name == "NPCESP_Highlight" then
+                        child:Destroy()
+                    end
+                end
+            end
+        end
+    end
+end)
+
+A:Button({
+Title = "傻逼功能",
+Desc = "我不知道",
+Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/ShutUpJamesTheLoserAlt/hatspin/refs/heads/main/hat"))()
+    end,
+})
+
+A:Button({
+Title = "西格玛spy",
+Desc = "null",
+Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/depthso/Sigma-Spy/refs/heads/main/Main.lua"))()
+end)
 
 B:Button({
 Title = "俄亥俄州功能",
@@ -915,7 +1029,28 @@ end)
 end
 })
 
-B:Button({
+A:Button({
+Title = "通用透视",
+Desc = "应该不能关闭",
+Callback = function()
+    local getnamecallmethod
+= getnamecallmethod
+local Speaker = cloneref(game:GetService("Players")).LocalPlayer
+local OldNameCall
+OldNameCall = hookmetamethod(game, "__namecall", function(self, ...)
+if self ~= Speaker or getnamecallmethod() ~= "IsInGroup" then
+return OldNameCall(self, ...)
+end
+return true
+end)
+hookfunction(Speaker.IsInGroup, function(self, ...)
+return true
+end)
+    
+    loadstring(game:GetObjects("rbxassetid://10092697033")[1].Source)()
+end)
+
+A:Button({
 Title = "ESP透视",
 Desc = "启用玩家ESP透视",
 Callback = function()
@@ -1092,6 +1227,14 @@ pcall(function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/ke9460394-dot/ugik/refs/heads/main/%E5%93%A5%E7%89%B9%E9%A3%8E%E9%BB%91%E6%B4%9E.txt"))()
 end)
 end
+})
+
+A:Button({
+Title = "旋转脚本",
+Desc = "eeeg",
+Callback = function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/r97d7dS0", true))()
+    end,
 })
 
 A:Button({
