@@ -1,24 +1,18 @@
-local soundId = "rbxassetid://90157211359035"
-local playCount = 10
+local Parke1 = "rbxassetid://90157211359035"
+local Parke2 = 10
 
-local sound = Instance.new("Sound")
-sound.SoundId = soundId
-sound.Volume = 0.5
-sound.Parent = workspace
+local Parke3 = Instance.new("Sound")
+Parke3.SoundId = Parke1
+Parke3.Parent = game.Workspace
 
-sound:Load()
-
-for i = 1, playCount do
-    sound:Play()
-    
-    sound.Ended:Wait()
-    
-    if i < playCount then
-        task.wait(0.2)
+for Parke4 = 1, Parke2 do
+    Parke3:Play()
+    repeat wait() until not Parke3.Playing
+    if Parke4 < Parke2 then
     end
 end
 
-sound:Destroy()
+Parke3:Destroy()
 
 local Parke3 = 'rbxassetid://139596311015842'
 game:GetService("StarterGui"):SetCore("SendNotification",{ 
