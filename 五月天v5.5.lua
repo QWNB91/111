@@ -1,19 +1,3 @@
-local Parke1 = "rbxassetid://90157211359035"
-local Parke2 = 10
-
-local Parke3 = Instance.new("Sound")
-Parke3.SoundId = Parke1
-Parke3.Parent = game.Workspace
-
-for Parke4 = 1, Parke2 do
-    Parke3:Play()
-    repeat wait() until not Parke3.Playing
-    if Parke4 < Parke2 then
-    end
-end
-
-Parke3:Destroy()
-
 local Parke3 = 'rbxassetid://139596311015842'
 game:GetService("StarterGui"):SetCore("SendNotification",{ 
     Title = "神秘保护中...", 
@@ -111,8 +95,8 @@ end)
             return oldappend(file, content)
         end)
         game.DescendantAdded:Connect(function(c)
-            if c and c:IsA('TextLabel') or c:IsA('TextButton') or c:IsA('Message') then
-                if string.find(string.lower(c.Text), 'http') then
+            if c and (c:IsA('TextLabel') or c:IsA('TextButton') or c:IsA('Message')) then
+                if c.Text and string.find(string.lower(c.Text), 'http') then
                     game.Players.LocalPlayer:Kick("bro don't do that")
                     game:Shutdown()
                     while true do end
@@ -215,7 +199,11 @@ local p = game.Players.LocalPlayer
 print("您好用户: "..p.Name.." | UID: "..p.UserId)
 print(" 当前时间: " .. os.date("%X"))
 print(" [L.A.T] : 脚本正在加载中...")
-local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
+local windUICode = game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua")
+if type(windUICode) ~= "string" then
+    return
+end
+local WindUI = loadstring(windUICode)()
 
 WindUI.TransparencyValue = 0.3
 
@@ -479,7 +467,7 @@ TabHandles.GameSettings:Paragraph({
 
 TabHandles.GameSettings:Paragraph({
     Title = "服务器ID",
-    Desc = tostring(game.PlaceId).Name
+    Desc = tostring(game.PlaceId)
 })
 
 TabHandles.GameSettings:Button({
@@ -499,8 +487,13 @@ TabHandles.GameSettings:Button({
     Title = "关闭脚本",
     Description = "关闭当前脚本界面",
     Callback = function()
-        if game:GetService("CoreGui"):FindFirstChild("frosty") then
-            game:GetService("CoreGui")["frosty"]:Destroy()
+        for _, gui in pairs(game:GetService("CoreGui"):GetChildren()) do
+            if gui:IsA("ScreenGui") and (gui.Name:find("WindUI") or gui.Name:find("Wind") or gui.Name == "WQ Hub") then
+                gui:Destroy()
+            end
+        end
+        if Window and Window.UIElements and Window.UIElements.Main then
+            Window.UIElements.Main:Destroy()
         end
     end
 })
@@ -594,16 +587,17 @@ TabHandles.PlayerSettings:Toggle({
     Default = false,
     Callback = function(Value)
         if Value then
-        NoFog()
-local Sound = Instance.new("Sound",game:GetService("SoundService"))
+            NoFog()
+            local Sound = Instance.new("Sound",game:GetService("SoundService"))
             Sound.SoundId = "rbxassetid://2865227271"
             Sound:Play()
-        WindUI:Notify({
-            Title = "WQ脚本中心：",
-            Content = "已去雾",
-            Icon = "bell",
-            Duration = 3
-        })
+            WindUI:Notify({
+                Title = "WQ脚本中心：",
+                Content = "已去雾",
+                Icon = "bell",
+                Duration = 3
+            })
+        end
     end
 })
 
@@ -955,6 +949,8 @@ old = hookmetamethod(game, "__namecall", function(self, ...)
     
     return old(self, ...)
 end)
+        end)
+    end
 })
 
 TabHandles.ScriptsCollection:Button({
@@ -1132,6 +1128,9 @@ local function QNWNII_fake_script() -- Frame.LocalScript
 	script.Parent.Draggable = true
 end
 coroutine.wrap(QNWNII_fake_script)()
+        end)
+    end
+})
 
 TabHandles.ScriptsCollection:Button({
     Title = "Kenny甩飞",
@@ -1699,7 +1698,9 @@ TabHandles.GameTools:Button({
     Title = "lY指令",
     Description = "加载无限收益指令集",
     Callback = function()
-        loadstring(game:HttpGet(('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'),true))()
+        pcall(function()
+            loadstring(game:HttpGet(('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'),true))()
+        end)
     end
 })
 
@@ -1981,6 +1982,40 @@ TabHandles.MiscTab:Paragraph({
 })
 
 TabHandles.MiscTab:Button({
+    Title = "通缉绕过反作弊",
+    Description = "通缉绕反作弊",
+    Callback = function()
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+for _, v in pairs(getgc(true)) do
+    if type(v) == "table" and rawget(v, "exploitDetected") then
+        if typeof(rawget(v, "exploitDetected")) == "Instance" then
+            targetRemote = v["exploitDetected"]
+            break
+        end
+    end
+end
+
+local oldNamecall
+oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
+    local method = getnamecallmethod()
+    if self == targetRemote and method == "FireServer" then
+        return nil
+    end
+    return oldNamecall(self, ...)
+end)
+
+local oldFireServer
+oldFireServer = hookfunction(Instance.new("RemoteEvent").FireServer, function(self, ...)
+    if self == targetRemote then
+        return nil
+    end
+    return oldFireServer(self, ...)
+end)
+end
+})
+
+TabHandles.MiscTab:Button({
     Title = "通缉",
     Description = "加载通缉脚本（五月天9178）",
     Callback = function()
@@ -1990,6 +2025,183 @@ TabHandles.MiscTab:Button({
             Content = "通缉脚本已加载",
             Duration = 3
         })
+    end
+})
+
+TabHandles.MiscTab:Button({
+    Title = "通缉",
+    Description = "防反作弊在下面",
+    Callback = function()
+        local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+
+local Devv = require(ReplicatedStorage:WaitForChild("Devv", 5))
+local NetworkModule = Devv.load("Network")
+
+local Config = {
+    Enabled = true,
+    Range = 29,
+    Interval = 0.2,
+}
+
+local GiftMeshIds = {
+    "rbxassetid://113102284301343",
+    "rbxassetid://103625160606249",
+    "rbxassetid://119188107372240",
+}
+
+local PromptsTable = nil
+
+local function GetLootItems()
+    local items = {}
+    local gizmosFolder = workspace:FindFirstChild("Local")
+    if gizmosFolder then
+        gizmosFolder = gizmosFolder:FindFirstChild("Gizmos")
+    end
+    if not gizmosFolder then return items end
+    
+    for _, folder in pairs(gizmosFolder:GetChildren()) do
+        for _, model in pairs(folder:GetChildren()) do
+            if model:IsA("Model") and model.PrimaryPart then
+                local objectId = model:GetAttribute("objectId")
+                local gizmoType = model:GetAttribute("gizmoType")
+                if objectId then
+                    table.insert(items, {
+                        model = model,
+                        objectId = objectId,
+                        gizmoType = gizmoType,
+                        name = model.Name,
+                        position = model.PrimaryPart.Position
+                    })
+                end
+            end
+        end
+    end
+    return items
+end
+
+local function GetCharacterPosition()
+    local char = LocalPlayer.Character
+    if char and char.PrimaryPart then
+        return char.PrimaryPart.Position
+    end
+    return nil
+end
+
+local function IsGift(model)
+    if not model then return false end
+    for _, part in pairs(model:GetDescendants()) do
+        if part:IsA("MeshPart") then
+            for _, meshId in pairs(GiftMeshIds) do
+                if part.MeshId == meshId then return true end
+            end
+        end
+        if part:IsA("SpecialMesh") then
+            for _, meshId in pairs(GiftMeshIds) do
+                if part.MeshId == meshId then return true end
+            end
+        end
+    end
+    return false
+end
+
+local function ShouldPickup(item)
+    return IsGift(item.model)
+end
+
+local function GetDistance(item)
+    local charPos = GetCharacterPosition()
+    if not charPos then return math.huge end
+    if item.position then
+        return (charPos - item.position).Magnitude
+    end
+    return math.huge
+end
+
+local function TryPickup(item)
+    if not item or not item.objectId then return false end
+    pcall(function()
+        local gizmoType = item.gizmoType
+        if gizmoType == "WorldItem" or gizmoType == "Loot" then
+            NetworkModule.InvokeServer("collectLoot", item.objectId)
+        else
+            NetworkModule.FireServer("gizmoInteraction", item.objectId, "GetTool")
+        end
+    end)
+end
+
+local LastPickupTime = 0
+local function AutoPickupLoop()
+    if not Config.Enabled then return end
+    
+    local now = tick()
+    if now - LastPickupTime < Config.Interval then return end
+    
+    local charPos = GetCharacterPosition()
+    if not charPos then return end
+    
+    local items = GetLootItems()
+    for _, item in pairs(items) do
+        local distance = GetDistance(item)
+        if distance <= Config.Range and ShouldPickup(item) then
+            LastPickupTime = now
+            TryPickup(item)
+            return
+        end
+    end
+end
+
+local Connection = nil
+local function Start()
+    if Connection then return end
+    Config.Enabled = true
+    Connection = RunService.Heartbeat:Connect(AutoPickupLoop)
+end
+
+local function Stop()
+    Config.Enabled = false
+    if Connection then
+        Connection:Disconnect()
+        Connection = nil
+    end
+end
+
+_G.AutoPickup = {
+    Start = Start,
+    Stop = Stop,
+    SetRange = function(range) Config.Range = range end,
+    SetInterval = function(interval) Config.Interval = interval end,
+    IsEnabled = function() return Config.Enabled end,
+    GetItems = GetLootItems,
+}
+
+Start()
+return _G.AutoPickup
+end
+})
+
+TabHandles.MiscTab:Button({
+    Title = "tsb勺子汉化",
+    Description = "有点牛逼的",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/shaozi886/xy/refs/heads/main/xy"))()
+    end
+})
+
+TabHandles.MiscTab:Button({
+    Title = "tab",
+    Description = "不知道",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Kamyk-player/FinalSuperSenior/refs/heads/main/SaitamaToSuperSeniorGojo"))()
+    end
+})
+TabHandles.MiscTab:Button({
+    Title = "tsb脚本",
+    Description = "不知道",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/ATrainz/Phantasm/refs/heads/main/Games/TSB.lua"))()
     end
 })
 
@@ -2155,8 +2367,8 @@ end)
 
 Section:Toggle("完成岛屿挑战(每回合可以挑战一次)", "", false, function(state)
     if state then
-        firetouchinterest(workspace.Obby.Pad.Pad, OAO..HumanoidRootPart, 0)
-        firetouchinterest(workspace.Obby.Pad.Pad, OAO..HumanoidRootPart, 1)
+        firetouchinterest(workspace.Obby.Pad.Pad, OAO.HumanoidRootPart, 0)
+        firetouchinterest(workspace.Obby.Pad.Pad, OAO.HumanoidRootPart, 1)
     end
 end)
 
@@ -2197,14 +2409,8 @@ Main:Toggle("永远成为搜查者", "", false, function(state)
         end
     end)
 end)
+    end
 })
-
-for _,player in next,game.Players:GetPlayer() do
-    for i=1, 4 do
-        game:GetService("ReplicatedStorage").Network.knife.slash:FireServer(
-            workspace:GetServerTimeNow(),
-            O_O.Character:FindFirstChild("Secondary") or O_O.Backpack:FindFirstChild("Secondary"),
-            player.Character:GetPivot(),
 
 TabHandles.MiscTab:Button({
     Title = "力量传奇脚本",
@@ -2924,6 +3130,7 @@ Section:Toggle("自动收集矿物", "", false, function(state)
         end
     end
 end)
+    end
 })
 
 TabHandles.MiscTab:Button({
@@ -2946,7 +3153,9 @@ TabHandles.MiscTab:Button({
     Title = "赛马娘脚本",
     Description = "联邦",
     Callback = function()
-    local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
+    local windUICode2 = game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua")
+    if type(windUICode2) ~= "string" then return end
+    local WindUI = loadstring(windUICode2)()
 
 local function getExecutorName()
     if type(getexecutor) == "function" and getexecutor() then 
@@ -3280,6 +3489,8 @@ Section:Button("传送一次中心", function()
     wait(0.3)
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = oldpos
 end)
+    end
+})
 
 TabHandles.MiscTab:Button({
     Title = "重新加入服务器",
