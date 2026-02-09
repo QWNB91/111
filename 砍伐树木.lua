@@ -1,7 +1,7 @@
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
 
 local Window = WindUI:CreateWindow({
-    Title = "苏脚本 ",
+    Title = "WQ脚本 ",
     Icon = "rbxassetid://70930606389113",
     IconThemed = true,
     Author = "by.SU",
